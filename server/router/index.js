@@ -1,15 +1,14 @@
-const Router = require('express').Router
+const Router = require("express").Router;
+const UserControllers = require("../controllers/user-controller");
+const router = new Router();
 
-const router = new Router()
-
-router.post('/registration')
-router.post('/login')
-router.post('/logout')
-router.get('/activate/:link')
-router.get('/refresh')
+// /api/
+router.post("/registration", UserControllers.registration);
+router.post("/login", UserControllers.login);
+router.post("/logout", UserControllers.logout);
+router.get("/activate/:link", UserControllers.activate);
+router.get("/refresh", UserControllers.refresh);
 //test endpoint
-router.get('/users')
+router.get("/users", UserControllers.getUsers);
 
-
-module.exports = router
-
+module.exports = router;
