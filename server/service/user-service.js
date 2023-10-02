@@ -19,7 +19,7 @@ class UserService {
     // запазваме потребителя в БД
     const user = await UserModel.create({email, password: hashPassword, activationLink})
     //  изпращаме писмо на потребителя за активиране на акаунта
-    await mailService.sendActivationMail(email, activationLink);
+    await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
     //  създаваме нов клас на user Data Transfer Object (Dto)
     const userDto = new UserDto(user);
