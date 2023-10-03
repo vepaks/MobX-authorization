@@ -15,16 +15,22 @@ class UserController {
       //  връщаме информация за потребителя и ткените към клинета (браузъра)
       return res.json(userData);
     } catch (e) {
-      console.log(e);
+      next(e);
     }
   }
   async login(req, res, next) {
     try {
-    } catch (e) {}
+    } catch (e) {
+      next(e);
+    }
   }
   async logout(req, res, next) {
     try {
-    } catch (e) {}
+    } catch (e) {
+      next(e);
+
+
+    }
   }
   async activate(req, res, next) {
     try {
@@ -32,17 +38,24 @@ class UserController {
     const activationLink = req.params.link
       await userService.activate(activationLink)
       return res.redirect(process.env.CLIENT_URL)
-    } catch (e) {}
+    } catch (e) {
+      next(e);
+
+    }
   }
   async refresh(req, res, next) {
     try {
-    } catch (e) {}
+    } catch (e) {
+      next(e);
+    }
   }
   // test controller
   async getUsers(req, res, next) {
     try {
       res.json(["2145", "Alex"]);
-    } catch (e) {}
+    } catch (e) {
+      next(e);
+    }
   }
 }
 
