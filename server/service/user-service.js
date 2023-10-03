@@ -10,7 +10,9 @@ class UserService {
     //  проверяваме дали в БД има вече такъв потребилет в противен случай хвърляме грешка
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
-      throw ApiError.BadRequest(`Потребител с електронна поща ${email} вече съществува!`);
+      throw ApiError.BadRequest(
+        `Потребител с електронна поща ${email} вече съществува!`,
+      );
     }
     //  генерираме уникален линк с помоща на uuid (може да се ползва хешираната парола)
     const activationLink = uuid.v4();
@@ -51,6 +53,26 @@ class UserService {
     user.isActivated = true;
     // записваме акаунта в БД
     await user.save();
+  }
+
+  async login(email, password) {
+    //  проверяваме дали вече има регистриран потребител с такъв email
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      throw ApiError.BadRequest(`Потребител с email ${email} не съществува.`);
+    }
+    //  проверяваме дали паролите съвпадат
+    const isPassEquals = await bcrypt.compare(password, user.password)
+    if(!isPassEquals) {
+      throw ApiError.BadRequest(`Грешна парола.`);
+    }
+    const userDto = new UserDto(user)
+    const tokens = tokenService.generateTokens({...UserDto})
+
+    await tokenService.saveToken(userDto.id, tokens.refreshToken)
+    return {...tokens, user: userDto}
+
+
   }
 }
 
