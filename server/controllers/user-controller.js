@@ -28,6 +28,10 @@ class UserController {
   }
   async activate(req, res, next) {
     try {
+    //   взимаме параметъра от link в роутъра и го предаваме в service
+    const activationLink = req.params.link
+      await userService.activate(activationLink)
+      return res.redirect(process.env.CLIENT_URL)
     } catch (e) {}
   }
   async refresh(req, res, next) {

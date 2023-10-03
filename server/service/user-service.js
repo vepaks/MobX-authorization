@@ -31,6 +31,19 @@ class UserService {
     //   връщаме информация за потребителя и двата токена
     return { ...tokens, user: userDto };
   }
+
+  async activate(activationLink) {
+    // търсим дали в БД съюествува акаунт със съшщия линк от параметъра
+    const user = await UserModel.findOne({ activationLink });
+    //  ако няма акаунт хвърляме грешка
+    if (!user) {
+      throw new Error("Неправилен линк за активация");
+    }
+    //  ако има - променяме полето isActivated на true
+    user.isActivated = true;
+    // записваме акаунта в БД
+    await user.save();
+  }
 }
 
 module.exports = new UserService();
