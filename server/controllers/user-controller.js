@@ -29,8 +29,8 @@ class UserController {
   }
   async login(req, res, next) {
     try {
-      const {email, password} = req.body
-      const userData = await userService.login(email, password)
+      const { email, password } = req.body;
+      const userData = await userService.login(email, password);
       //  запазваме бисквитката
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -44,6 +44,11 @@ class UserController {
   }
   async logout(req, res, next) {
     try {
+      const { refreshToken } = req.cookies;
+      const token = await userService.logout(refreshToken);
+      res.clearCookie("refreshToken");
+      // return res.status(200)
+      return res.json(token);
     } catch (e) {
       next(e);
     }

@@ -62,17 +62,20 @@ class UserService {
       throw ApiError.BadRequest(`Потребител с email ${email} не съществува.`);
     }
     //  проверяваме дали паролите съвпадат
-    const isPassEquals = await bcrypt.compare(password, user.password)
-    if(!isPassEquals) {
+    const isPassEquals = await bcrypt.compare(password, user.password);
+    if (!isPassEquals) {
       throw ApiError.BadRequest(`Грешна парола.`);
     }
-    const userDto = new UserDto(user)
-    const tokens = tokenService.generateTokens({...UserDto})
+    const userDto = new UserDto(user);
+    const tokens = tokenService.generateTokens({ ...UserDto });
 
-    await tokenService.saveToken(userDto.id, tokens.refreshToken)
-    return {...tokens, user: userDto}
+    await tokenService.saveToken(userDto.id, tokens.refreshToken);
+    return { ...tokens, user: userDto };
+  }
 
-
+  async logout(refreshToken) {
+    const token = await tokenService.removeToken(refreshToken);
+    return token;
   }
 }
 
