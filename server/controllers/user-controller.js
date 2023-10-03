@@ -1,8 +1,17 @@
 const userService = require("../service/user-service");
-
+const { validationResult } = require("express-validator");
+const ApiError = require("../exceptions/app-error");
 class UserController {
   async registration(req, res, next) {
     try {
+      //  проверяваме резултата от валидацията
+      const errors = validationResult(req);
+      // ако има грешка я прихващаме с middleware
+      if (!errors.isEmpty()) {
+        return next(
+          ApiError.BadRequest("Грешка при валидация", errors.array()),
+        );
+      }
       //  изваждаме данните от req
       const { email, password } = req.body;
       // изпращаме ги към service
@@ -20,6 +29,7 @@ class UserController {
   }
   async login(req, res, next) {
     try {
+
     } catch (e) {
       next(e);
     }
@@ -28,19 +38,16 @@ class UserController {
     try {
     } catch (e) {
       next(e);
-
-
     }
   }
   async activate(req, res, next) {
     try {
-    //   взимаме параметъра от link в роутъра и го предаваме в service
-    const activationLink = req.params.link
-      await userService.activate(activationLink)
-      return res.redirect(process.env.CLIENT_URL)
+      //   взимаме параметъра от link в роутъра и го предаваме в service
+      const activationLink = req.params.link;
+      await userService.activate(activationLink);
+      return res.redirect(process.env.CLIENT_URL);
     } catch (e) {
       next(e);
-
     }
   }
   async refresh(req, res, next) {
