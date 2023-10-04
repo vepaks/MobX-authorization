@@ -76,13 +76,13 @@ class UserService {
     const token = await tokenService.removeToken(refreshToken);
     return token;
   }
-  async refresh (refreshToken) {
+  async refresh(refreshToken) {
     if (!refreshToken) {
-      throw ApiError.UnauthorizedError()
+      throw ApiError.UnauthorizedError();
     }
 
-    const userData = tokenService.validateRefreshToken(refreshToken)
-    const tokenFromDb = await tokenService.findToken(refreshToken)
+    const userData = tokenService.validateRefreshToken(refreshToken);
+    const tokenFromDb = await tokenService.findToken(refreshToken);
 
     if (!userData || !tokenFromDb) {
       throw ApiError.UnauthorizedError();
@@ -95,7 +95,10 @@ class UserService {
 
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
-
+  }
+  async getAllUsers() {
+    const users = await UserModel.find();
+    return users;
   }
 }
 
