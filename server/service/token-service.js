@@ -54,8 +54,6 @@ class TokenService {
     return tokenData;
   }
 
-
-
 }
 
 module.exports = new TokenService();
