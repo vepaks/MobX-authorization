@@ -12,7 +12,13 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(
+    {
+        credentials: true,
+        // линк за front end
+        origin: process.env.CLIENT_URL
+    }
+));
 app.use("/api", router);
 app.use(errorMiddleware)
 //  функция за стартиране на сървъра и свързване към БД

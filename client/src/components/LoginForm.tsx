@@ -1,10 +1,14 @@
 import React from 'react';
 import { Button, Form, Input } from 'antd';
+import Store from "../store/store";
 
 const onFinish = (values: any) => {
-    console.log('Success:', values);
-    console.log(values.email)
-    console.log(values.password)
+    const store = new Store()
+    store.registration(values.email, values.password)
+
+    // console.log('Success:', values);
+    // console.log(values.email)
+    // console.log(values.password)
 };
 
 const onFinishFailed = (errorInfo: any) => {
