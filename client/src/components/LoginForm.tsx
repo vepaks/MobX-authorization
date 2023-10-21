@@ -1,59 +1,34 @@
-import React from 'react';
-import { Button, Form, Input } from 'antd';
-import Store from "../store/store";
+import React, {FC, useContext, useState} from 'react';
+import {Context} from "../index";
+import {observer} from "mobx-react-lite";
 
-const onFinish = (values: any) => {
-    const store = new Store()
-    store.registration(values.email, values.password)
+const LoginForm: FC = () => {
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const {store} = useContext(Context);
 
-    // console.log('Success:', values);
-    // console.log(values.email)
-    // console.log(values.password)
+    return (
+        <div>
+            <input
+                onChange={e => setEmail(e.target.value)}
+                value={email}
+                type="text"
+                placeholder='Email'
+            />
+            <input
+                onChange={e => setPassword(e.target.value)}
+                value={password}
+                type="password"
+                placeholder='Пароль'
+            />
+            <button onClick={() => store.login(email, password)}>
+                Влез
+            </button>
+            <button onClick={() => store.registration(email, password)}>
+                Регистрирай се
+            </button>
+        </div>
+    );
 };
 
-const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-};
-
-type FieldType = {
-    email?: string;
-    password?: string;
-};
-// const [email, setEmail] = useState<string>('')
-// const [password, setPassword] = useState<string>('')
-const LoginForm: React.FC = () => (
-    <Form
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
-    >
-        <Form.Item<FieldType>
-            label="email"
-            name="email"
-            rules={[{ required: true, type: "email", message: 'email трябва да бъде email!' }]}
-        >
-            <Input/>
-        </Form.Item>
-
-        <Form.Item<FieldType>
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-        >
-            <Input.Password />
-        </Form.Item>
-
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-                Submit
-            </Button>
-        </Form.Item>
-    </Form>
-);
-
-export default LoginForm;
+export default observer(LoginForm);
